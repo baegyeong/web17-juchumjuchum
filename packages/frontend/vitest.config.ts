@@ -1,11 +1,29 @@
-/// <reference types="vitest" />
+import path from 'path';
 import { defineConfig } from 'vitest/config';
+import 'vitest-canvas-mock';
 
 export default defineConfig({
   test: {
-    globals: true,
+    setupFiles: ['./vitest.setup.ts'],
     environment: 'jsdom',
-    setupFiles: ['./__tests__/setupTests'],
+    globals: true,
+    deps: {
+      optimizer: {
+        web: {
+          include: ['vitest-canvas-mock'],
+        },
+      },
+    },
     include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+    environmentOptions: {
+      jsdom: {
+        resources: 'usable',
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
   },
 });
